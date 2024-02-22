@@ -18,7 +18,8 @@ public class AddNewContactsTests extends AppiumConfig {
     public void preCondition() {
         new AuthenticationScreen(driver)
                 .filLoginRegistrationForm(Auth.builder().email("mara@gmail.com").password("Mmar123456$").build())
-                .submitLogin();
+                .submitLogin()
+                .isActivityTitleDisplayed("Contact list");
     }
 
     @Test
@@ -57,9 +58,44 @@ public class AddNewContactsTests extends AppiumConfig {
     }
 
 
+    @Test
+    public void createContactWithEmptyName(){
+        Contact contact = Contact.builder()
+                .lastName("Wow")
+                .email("wow@gmail.com")
+                .phone("65569845123456")
+                .address("NY")
+                .description("Empty name")
+                .build();
+        new ContactListScreen(driver)
+                .openContactForm()
+                .fillContactForm(contact)
+                .submitContactFormNegative()
+                .isErrorContainsText("{name=must not be blank}");
+
+    }
+
+    @Test
+    public void createContactWithEmptyLastName(){
+        Contact contact = Contact.builder()
+                .name("Rony")
+                .email("wow@gmail.com")
+                .phone("65569845123456")
+                .address("NY")
+                .description("Empty LastName")
+                .build();
+        new ContactListScreen(driver)
+                .openContactForm()
+                .fillContactForm(contact)
+                .submitContactFormNegative()
+                .isErrorContainsText("{lastName=must not be blank}");
+
+    }
+
     @AfterClass
     public void postCondition() {
         new ContactListScreen(driver)
                 .logout();
+
     }
 }
