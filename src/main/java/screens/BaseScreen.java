@@ -59,6 +59,13 @@ public class BaseScreen {
         }
     }
 
+    public void shouldLessOne(List<AndroidElement>list,int less){
+        new WebDriverWait(driver,5)
+                .until(ExpectedConditions
+                        .numberOfElementsToBeLessThan
+                                (By.xpath("//*[@resource-id='com.sheygam.contactapp:id/rowContainer']"),less));
+    }
+
     public boolean isElementPresentList(By locator){
         return driver.findElements(locator).size()>0;
     }

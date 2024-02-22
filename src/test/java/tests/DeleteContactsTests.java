@@ -19,6 +19,7 @@ public class DeleteContactsTests extends AppiumConfig {
     @Test
     public void DeleteFirstContact(){
         new ContactListScreen(driver)
-                .deleteFirstContact();
+                .deleteFirstContact()
+                .isListSizeLessOnOne();
     }
 }
