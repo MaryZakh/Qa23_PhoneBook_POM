@@ -33,11 +33,15 @@ public class ContactListScreen extends BaseScreen {
         return isShouldHave(activityTextView, text, 8);
     }
 
-    public AuthenticationScreen logout() {
-        menuOptions.click();
-        logoutBtn.click();
-        return new AuthenticationScreen(driver);
-    }
+    public AuthenticationScreen logout()
+    {
+        if (activityTextView.getText().equals("Contact list")) {
+            menuOptions.click();
+            logoutBtn.click();
+        }
+            return new AuthenticationScreen(driver);
+        }
+
 
     public ContactListScreen isAccountOpened() {
         Assert.assertTrue(isActivityTitleDisplayed("Contact list"));
