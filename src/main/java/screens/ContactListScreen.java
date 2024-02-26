@@ -24,7 +24,7 @@ public class ContactListScreen extends BaseScreen {
     AndroidElement menuOptions;
 
     @FindBy(xpath = "//*[@content-desc='More options']")
-    List<AndroidElement>menuOptionsList;
+    List<AndroidElement> menuOptionsList;
 
     @FindBy(xpath = "//*[@text = 'Logout']")
     AndroidElement logoutBtn;
@@ -36,10 +36,13 @@ public class ContactListScreen extends BaseScreen {
     List<AndroidElement> contactNameList;
 
     @FindBy(xpath = "//*[@resource-id='com.sheygam.contactapp:id/rowContainer']")
-    List<AndroidElement>contactList;
+    List<AndroidElement> contactList;
 
     @FindBy(id = "android:id/button1")
     AndroidElement yesBtn;
+
+    @FindBy(id = "com.sheygam.contactapp:id/emptyTxt")
+            AndroidElement noContactsHereTextView;
     int countBefore;
     int countAfter;
 
@@ -57,7 +60,7 @@ public class ContactListScreen extends BaseScreen {
     }
 
     public AuthenticationScreen logout2() {
-        if(isElementDisplayed(menuOptions)){
+        if (isElementDisplayed(menuOptions)) {
             menuOptions.click();
             logoutBtn.click();
         }
@@ -66,7 +69,7 @@ public class ContactListScreen extends BaseScreen {
 
 
     public AuthenticationScreen logout3() {
-        if(isElementPresentList(menuOptionsList)){
+        if (isElementPresentList(menuOptionsList)) {
             menuOptions.click();
             logoutBtn.click();
         }
@@ -103,35 +106,45 @@ public class ContactListScreen extends BaseScreen {
         return this;
     }
 
-    public ContactListScreen deleteFirstContact(){
+    public ContactListScreen deleteFirstContact() {
         isActivityTitleDisplayed("Contact list");
-        countBefore=contactList.size();
+        countBefore = contactList.size();
         System.out.println(countBefore);
         AndroidElement first = contactList.get(0);
         Rectangle rectangle = first.getRect();
-        int xFrom = rectangle.getX()+ rectangle.getWidth()/8;
-        int y = rectangle.getY()+rectangle.getHeight()/2;
-        int xTo = rectangle.getX()+(rectangle.getWidth()/8)*7;
-        TouchAction<?>touchAction = new TouchAction<>(driver);
-        touchAction.longPress(PointOption.point(xFrom,y))
-                .moveTo(PointOption.point(xTo,y))
+        int xFrom = rectangle.getX() + rectangle.getWidth() / 8;
+        int y = rectangle.getY() + rectangle.getHeight() / 2;
+        int xTo = rectangle.getX() + (rectangle.getWidth() / 8) * 7;
+        TouchAction<?> touchAction = new TouchAction<>(driver);
+        touchAction.longPress(PointOption.point(xFrom, y))
+                .moveTo(PointOption.point(xTo, y))
                 .release().perform();
-        should(yesBtn,8);
+        should(yesBtn, 8);
         yesBtn.click();
-        shouldLessOne(contactList,countBefore);
-        countAfter=contactList.size();
+        shouldLessOne(contactList, countBefore);
+        countAfter = contactList.size();
         System.out.println(countAfter);
 
 
-
-        return  this;
+        return this;
     }
 
-    public ContactListScreen isListSizeLessOnOne(){
-        Assert.assertEquals(countBefore-countAfter,1);
+    public ContactListScreen isListSizeLessOnOne() {
+        Assert.assertEquals(countBefore - countAfter, 1);
+        return this;
+    }
+
+    public ContactListScreen removeAllContacts() {
+        pause(1000);
+        while (contactList.size() > 0) {
+            deleteFirstContact();
+        }
+        return this;
+    }
 
 
-
+    public ContactListScreen isNoContactsHere(){
+        isShouldHave(noContactsHereTextView, "No Contacts. Add One more!",10);
         return this;
     }
 }

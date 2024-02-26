@@ -66,6 +66,16 @@ public class BaseScreen {
                                 (By.xpath("//*[@resource-id='com.sheygam.contactapp:id/rowContainer']"),less));
     }
 
+    public void pause(int time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     public boolean isElementPresentList(By locator){
         return driver.findElements(locator).size()>0;
     }
